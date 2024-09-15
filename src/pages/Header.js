@@ -1,33 +1,67 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import Login from './Login'
-import Movieslist from './Movieslist'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+
 function Header() {
+  const [isNavOpen, setIsNavOpen] = useState(false) // Track if nav is open
+  const [navItems, setNavItems] = useState([]) // Nav items
+
+  // Simulate fetching navigation items dynamically
+  const fetchNavItems = () => {
+    setNavItems(prev => {
+      return localStorage.getItem('login')
+        ? [
+            { name: 'SignUp', path: '/' },
+            { name: 'Login', path: '/login' },
+            { name: 'Main', path: '/main' },
+          ]
+        : [
+            { name: 'SignUp', path: '/' },
+            { name: 'Login', path: '/login' },
+          ]
+    })
+  }
+
+  const handleToggleClick = () => {
+    setIsNavOpen(!isNavOpen) // Toggle the navbar open state
+    if (!isNavOpen) {
+      fetchNavItems() // Fetch nav items only when opening
+    }
+  }
+  const navigate = useNavigate()
   return (
     <div>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a className="navbar-brand" href="#">Geeksynergy</a>
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div className="navbar-brand" onClick={() => navigate('/*')}>
+          Geeksynergy
+        </div>
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={handleToggleClick} // Handle click
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded={isNavOpen}
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav ms-auto">
-                <li className="nav-item active">
-                    <Link className="nav-link" to="/">SignUp</Link>
-                </li>
-                {/* <li className="nav-item">
-                    <Link className="nav-link" to="/signup">Signup</Link>
-                </li> */}
-                <li className="nav-item">
-                    <Link className="nav-link" to="/login">Login</Link>
-                </li>
-                <li className="nav-item">
-                <Link className="nav-link" to="/main">Main</Link>
-                </li>
-                </ul>
-            </div>
-        </nav>
+        <div
+          className={`collapse navbar-collapse ${isNavOpen ? 'show' : ''}`}
+          id="navbarSupportedContent"
+        >
+          <ul className="navbar-nav ms-auto">
+            {navItems.map((item, index) => (
+              <li key={index} className="nav-item">
+                <Link className="nav-link" to={item.path}>
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
     </div>
   )
 }

@@ -18,10 +18,14 @@ const Login = () => {
     const handleLogin = () => {
         const savedUserDetails =
           JSON.parse(localStorage.getItem('userDetails'))
-        if(useDetails.name === savedUserDetails.name && useDetails.password === savedUserDetails.password){
-            navigate('/main')
-        }else{
-            window.alert('Invalid Credentials.')
+        if (
+          useDetails.name.length > 0 && useDetails.password.length > 0 && useDetails.name === savedUserDetails.name &&
+          useDetails.password === savedUserDetails.password
+        ) {
+          navigate('/main')
+          localStorage.setItem('login',true)
+        } else {
+          window.alert('Invalid Credentials.')
         }
     } 
     return (
@@ -40,9 +44,6 @@ const Login = () => {
           value={useDetails.password}
           onChange={handleFunction}
         /><br/>
-        {/* <div>{useDetails.name}</div>
-        <div>{useDetails.password}</div> */}
-
         <button onClick={handleLogin} className="btn btn-success">Login</button>
       </div>
     )

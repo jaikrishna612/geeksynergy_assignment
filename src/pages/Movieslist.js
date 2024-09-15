@@ -1,60 +1,43 @@
-// import  { useEffect, useState } from 'react'
+import axios from 'axios'
+import React, { useState } from 'react'
+import { useEffect } from 'react'
 
-// const Movieslist = () => {
-//   const [movies, setMovies] = useState([])
-//   const [error, setError] = useState(null)
-
-//   useEffect(() => {
-//     const fetchMovies = async () => {
-//       try {
-//         const response = await fetch('https://hoblist.com/api/movieList', {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify({
-//             category: 'movies',
-//             language: 'kannada',
-//             genre: 'all',
-//             sort: 'voting',
-//           }),
-//         })
-
-//         if (!response.ok) {
-//           throw new Error('Failed to fetch data')
-//         }
-
-//         const data = await response.json()
-//         setMovies(data)
-//       } catch (error) {
-//         setError(error.message)
-//       }
-//     }
-
-//     fetchMovies()
-//   }, []) 
-//   return (
-//     <div>
-//       {error ? (
-//         <p>Error: {error}</p>
-//       ) : (
-//         <ul>
-//           {movies.map((movie, index) => (
-//             <li key={index}>{movie.title}</li>
-//           ))}
-//         </ul>
-//       )}
-//     </div>
-//   )
-// }
-
-// export default Movieslist
-import React from 'react'
-
-function Movieslist() {
+function UseEffectDemo() {
+  let [users, setapi] = useState([])
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/posts')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        return response.json()
+      })
+      .then((data) => setapi(data))
+      .catch((err) => console.log(err))
+  }, [])
+  console.log(users)
   return (
-    <div>Movieslist</div>
+    <div className="container">
+      <table className="table text-center">
+        <thead>
+          <tr>
+            <th>UserId</th>
+            <th>Id</th>
+            <th>Title</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((userObj) => (
+            <tr key={userObj.id}>
+              <td>{userObj.userId}</td>
+              <td>{userObj.id}</td>
+              <td>{userObj.title}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
-export default Movieslist
+export default UseEffectDemo
